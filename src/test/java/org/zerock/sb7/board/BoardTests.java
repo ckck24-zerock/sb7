@@ -12,6 +12,8 @@ import org.zerock.sb7.board.repo.BoardRepo;
 import org.zerock.sb7.board.repo.FavoriteRepo;
 import org.zerock.sb7.board.repo.ReplyRepo;
 
+import java.util.Arrays;
+
 @SpringBootTest
 @Log4j2
 public class BoardTests {
@@ -28,7 +30,9 @@ public class BoardTests {
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
+        Page<Object[]> result = boardRepo.list1(pageable);
 
+        result.forEach(arr -> log.info(Arrays.toString(arr)));
 
     }
 

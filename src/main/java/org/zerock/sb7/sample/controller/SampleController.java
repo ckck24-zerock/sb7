@@ -39,6 +39,7 @@ public class SampleController {
         log.info("ex3");
     }
 
+    @PreAuthorize("#dto.author == authentication.name")
     @GetMapping("exDTO")
     public void exDTO(SampleDTO dto ){
 

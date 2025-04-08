@@ -13,4 +13,9 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bno;
 
+    private String title;
+    private String content;
+    private String writer;
+
+
 }

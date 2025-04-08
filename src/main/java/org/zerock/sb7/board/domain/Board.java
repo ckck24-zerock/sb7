@@ -1,11 +1,12 @@
 package org.zerock.sb7.board.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +26,20 @@ public class Board {
 
     private String writer;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    private List<BoardImage> images = new ArrayList<>();
+
+    public void addImage(String fileName){
+        BoardImage image = new BoardImage();
+        image.setFileName(fileName);
+        image.setOrd(images.size());
+        images.add(image);
+    }
+
+    public void clearImages(){
+        images.clear();
+    }
 
 
 }

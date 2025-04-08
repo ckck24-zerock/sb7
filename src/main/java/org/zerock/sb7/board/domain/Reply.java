@@ -9,24 +9,18 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Favorite {
+public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer fid;
+    private Integer rno;
+
+    private String str;
 
     private String mid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
-    private Choice choice;
 
 }
-
-
-
-
-
-
-

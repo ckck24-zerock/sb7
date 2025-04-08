@@ -11,12 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Log4j2
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class CustomSecurityConfig {
+
+    private final DataSource dataSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,9 +33,23 @@ public class CustomSecurityConfig {
            //config.loginPage("/login");
         });
 
+        http.rememberMe(config -> {
+            config.key("12345678");
+            config.tokenRepository(persistentTokenRepository());
+            config.tokenValiditySeconds(604800); //7days
+        });
+
         http.csrf(config -> { config.disable();});
 
         return http.build();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
     }
 
     @Bean

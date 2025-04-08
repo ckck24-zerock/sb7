@@ -45,9 +45,5 @@ public class SampleController {
 
         log.info("exDTO");
         log.info(dto);
-
     }
-
-
-
 }

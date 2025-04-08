@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.zerock.sb7.sample.controller.dto.SampleDTO;
 
 @Controller
 @RequestMapping("/sample")
@@ -37,5 +38,15 @@ public class SampleController {
     public void ex3(){
         log.info("ex3");
     }
+
+    @GetMapping("exDTO")
+    public void exDTO(SampleDTO dto ){
+
+        log.info("exDTO");
+        log.info(dto);
+
+    }
+
+
 
 }

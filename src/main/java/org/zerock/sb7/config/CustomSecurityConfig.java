@@ -28,14 +28,14 @@ public class CustomSecurityConfig {
         return http.build();
     }
 
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
 
         log.info("------------web configure-------------------");
 
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 
     }
-
-
 
 }

@@ -38,15 +38,11 @@ public class MemberDTO implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        System.out.println("--------------getAuthorities");
-
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roleNames.stream().map(name -> new SimpleGrantedAuthority("ROLE_"+name)).collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-
-        System.out.println("--------------getPassword");
 
         return this.mpw;
     }

@@ -13,6 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.zerock.sb7.board.domain.*;
 import org.zerock.sb7.board.repo.BoardRepo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Log4j2
 @RequiredArgsConstructor
 public class BoardSearchImpl implements BoardSearch {
@@ -41,7 +44,7 @@ public class BoardSearchImpl implements BoardSearch {
         query.leftJoin(reply).on(reply.board.eq(board));
         //검색 조건 나중에 추가
 
-        //query.where(favorite.choice.eq(Choice.LIKE));
+        //query.where(favorite.choice.eq(Choice.LIKE)); // 비추만 달린 글이 안 나오는 문제
         query.where(boardImage.ord.eq(0));
         query.groupBy(board);
 
@@ -49,15 +52,20 @@ public class BoardSearchImpl implements BoardSearch {
         query.offset(offset);
         query.orderBy(new OrderSpecifier<>(Order.DESC, board.bno));
 
-        JPQLQuery<Tuple> listTuqleQuery = query.select(board.bno, board.title, board.writer, boardImage.fileName,
+        JPQLQuery<Tuple> listTuqleQuery = query.select(
+                board.bno, board.title, board.writer, boardImage.fileName,
                 favorite.choice.eq(Choice.LIKE).countDistinct(),
                 reply.countDistinct());
 
 
         log.info("----------------------------");
-        listTuqleQuery.fetch();
 
+        List<Tuple> results = listTuqleQuery.fetch();
 
+        List<Integer> bnos =
+                results.stream().map(tuple -> tuple.get(0, Integer.class)).collect(Collectors.toUnmodifiableList());
+
+        log.info("Found {} boards", bnos);
 
 
     }

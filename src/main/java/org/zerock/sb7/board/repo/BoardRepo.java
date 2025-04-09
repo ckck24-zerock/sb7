@@ -12,7 +12,8 @@ public interface BoardRepo extends JpaRepository<Board, Integer> {
             " from Board b " +
             " left join b.images bi "+
             " left join Favorite f on f.board = b " +
-            " where bi.ord = 0 "+
+            " where bi.ord = 0 " +
+            " and f.choice = org.zerock.sb7.board.domain.Choice.LIKE "+
             " group by b")
     Page<Object[]> listOfPage(Pageable pageable);
 

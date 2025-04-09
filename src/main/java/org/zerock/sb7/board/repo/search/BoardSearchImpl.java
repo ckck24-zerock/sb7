@@ -1,5 +1,8 @@
 package org.zerock.sb7.board.repo.search;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +33,29 @@ public class BoardSearchImpl implements BoardSearch {
         QBoard board = QBoard.board;
         QFavorite favorite = QFavorite.favorite;
         QBoardImage boardImage = QBoardImage.boardImage;
+        QReply reply = QReply.reply;
 
         JPQLQuery<Board> query = queryFactory.selectFrom(board);
         query.leftJoin(board.images, boardImage); //element collection
         query.leftJoin(favorite).on(favorite.board.eq(board));
-
+        query.leftJoin(reply).on(reply.board.eq(board));
         //검색 조건 나중에 추가
 
         query.where(favorite.choice.eq(Choice.LIKE));
         query.where(boardImage.ord.eq(0));
         query.groupBy(board);
 
+        query.limit(limit);
+        query.offset(offset);
+        query.orderBy(new OrderSpecifier<>(Order.DESC, board.bno));
+
+        JPQLQuery<Tuple> listTuqleQuery = query.select(board.bno, board.title, board.writer, boardImage.fileName,
+                favorite.countDistinct(), reply.countDistinct());
+
+
         log.info("----------------------------");
-        log.info(query);
+        listTuqleQuery.fetch();
+
 
 
 

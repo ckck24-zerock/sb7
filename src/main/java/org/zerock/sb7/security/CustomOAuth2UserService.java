@@ -2,12 +2,14 @@ package org.zerock.sb7.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.zerock.sb7.member.repo.MemberRepo;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,6 +18,9 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+    private final MemberRepo memberRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -48,6 +53,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         log.info("email: " + email);
 
+
+        //회원을 의미하는 MemberDTO를 반환하도록 수정
         return super.loadUser(userRequest);
     }
 

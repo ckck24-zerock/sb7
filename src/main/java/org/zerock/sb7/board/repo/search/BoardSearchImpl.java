@@ -41,7 +41,7 @@ public class BoardSearchImpl implements BoardSearch {
         query.leftJoin(reply).on(reply.board.eq(board));
         //검색 조건 나중에 추가
 
-        query.where(favorite.choice.eq(Choice.LIKE));
+        //query.where(favorite.choice.eq(Choice.LIKE));
         query.where(boardImage.ord.eq(0));
         query.groupBy(board);
 
@@ -50,7 +50,8 @@ public class BoardSearchImpl implements BoardSearch {
         query.orderBy(new OrderSpecifier<>(Order.DESC, board.bno));
 
         JPQLQuery<Tuple> listTuqleQuery = query.select(board.bno, board.title, board.writer, boardImage.fileName,
-                favorite.countDistinct(), reply.countDistinct());
+                favorite.choice.eq(Choice.LIKE).countDistinct(),
+                reply.countDistinct());
 
 
         log.info("----------------------------");

@@ -3,6 +3,7 @@ package org.zerock.sb7.member.dto;
 import lombok.Data;
 import org.apache.catalina.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.zerock.sb7.member.domain.Member;
 
@@ -36,16 +37,25 @@ public class MemberDTO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+
+        System.out.println("--------------getAuthorities");
+
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return "";
+
+        System.out.println("--------------getPassword");
+
+        return this.mpw;
     }
 
     @Override
     public String getUsername() {
-        return "";
+
+        System.out.println("--------------getUsername");
+
+        return this.mid;
     }
 }

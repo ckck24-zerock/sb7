@@ -42,4 +42,11 @@ public class MemberRepoTest {
         }//end for
     }
 
+    @Test
+    public void testSelectOne() {
+        String mid = "user19";
+
+        log.info(memberRepo.selectOne(mid));
+    }
+
 }

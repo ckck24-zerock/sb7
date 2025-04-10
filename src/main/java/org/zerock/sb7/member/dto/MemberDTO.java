@@ -38,16 +38,6 @@ public class MemberDTO implements UserDetails, OAuth2User {
 
 
     @Override
-    public <A> A getAttribute(String name) {
-        return OAuth2User.super.getAttribute(name);
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return Map.of();
-    }
-
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         return roleNames.stream().map(name -> new SimpleGrantedAuthority("ROLE_"+name)).collect(Collectors.toList());
@@ -69,6 +59,11 @@ public class MemberDTO implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return "";
+        return this.mid;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return Map.of();
     }
 }

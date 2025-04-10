@@ -53,6 +53,8 @@ public class FileUploadUtil {
 
                 FileCopyUtils.copy(file.getBytes(), path.toFile());
 
+                uploadedFileNames.add(saveFileName);
+
             }//end for
 
         }//end if

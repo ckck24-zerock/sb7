@@ -9,11 +9,14 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.zerock.sb7.member.domain.Member;
+import org.zerock.sb7.member.domain.MemberRole;
 import org.zerock.sb7.member.dto.MemberDTO;
 import org.zerock.sb7.member.repo.MemberRepo;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Log4j2
 @Service
@@ -53,6 +56,21 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         log.info("email: " + email);
+
+        //MemberRepo에서 mid값이 email 회원 정보를 찾아옴 social값은 false
+        Member member = memberRepo.selectOne(email);
+        //없다면
+        if(member == null){
+            //새로운 Member 엔티티 생성 해서 저장
+            Member newbie = Member.builder()
+                    .mid(email)
+                    .email(email)
+                    .mpw(passwordEncoder.encode("1111"))
+                    .social(true)
+                    .roleSet(Set.of(MemberRole.USER))
+                    .build();
+            memberRepo.save(newbie);
+        }
 
         String password = passwordEncoder.encode("1111");
 
